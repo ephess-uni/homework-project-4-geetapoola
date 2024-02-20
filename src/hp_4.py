@@ -39,7 +39,6 @@ def add_date_range(values, start_date):
     in the returned list."""
     if not isinstance(start_date, str):
         raise TypeError("start_date must be a string in the format yyyy-mm-dd")
-    start_date = datetime.strptime(start_date, '%Y-%m-%d')
     dr = date_range(start_date, len(values))
     return list(zip(dr, values))
 
