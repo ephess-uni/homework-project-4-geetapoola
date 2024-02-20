@@ -8,21 +8,40 @@ from collections import defaultdict
 def reformat_dates(old_dates):
     """Accepts a list of date strings in format yyyy-mm-dd, re-formats each
     element to a format dd mmm yyyy--01 Jan 2001."""
-    pass
+    reformatted_dates = []
+    for date_str in old_dates:
+        date_obj = datetime.strptime(date_str, '%Y-%m-%d')
+        reformatted_dates.append(date_obj.strftime('%d %b %Y'))
+    return reformatted_dates
 
 
 def date_range(start, n):
     """For input date string `start`, with format 'yyyy-mm-dd', returns
     a list of of `n` datetime objects starting at `start` where each
     element in the list is one day after the previous."""
-    pass
+    if not isinstance(start, str):
+        raise TypeError("start must be a string in the format yyyy-mm-dd")
+    if not isinstance(n, int):
+        raise TypeError("n must be an integer")
+    start_date = datetime.strptime(start, '%Y-%m-%d')
+    def next_date():
+        current_date = start_date
+        for _ in range(n):
+            yield current_date
+            current_date += timedelta(days=1)
+    date_gen = next_date()
+    return [next(date_gen) for _ in range(n)]
 
 
 def add_date_range(values, start_date):
     """Adds a daily date range to the list `values` beginning with
     `start_date`.  The date, value pairs are returned as tuples
     in the returned list."""
-    pass
+    if not isinstance(start_date, str):
+        raise TypeError("start_date must be a string in the format yyyy-mm-dd")
+    start_date = datetime.strptime(start_date, '%Y-%m-%d')
+    date_range = date_range(start_date, len(values))
+    return list(zip(date_range, values))
 
 
 def fees_report(infile, outfile):
