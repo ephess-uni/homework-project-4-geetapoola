@@ -46,7 +46,20 @@ def add_date_range(values, start_date):
 def fees_report(infile, outfile):
     """Calculates late fees per patron id and writes a summary report to
     outfile."""
-    pass
+    with open(infile, newline='') as csvfile:
+        reader = DictReader(csvfile)
+        late_fees = defaultdict(float)
+        for row in reader:
+            date_due = datetime.strptime(row['date_due'], '%m/%d/%Y')
+            date_returned = datetime.strptime(row['date_returned'], '%m/%d/%Y')
+            days_late = (date_returned - date_due).days
+            late_fee = days_late * 0.25
+            late_fees[row['patron_id']] += late_fee
+    with open(outfile, 'w', newline='') as csvfile:
+        writer = DictWriter(csvfile, fieldnames=['patron_id', 'late_fees'])
+        writer.writeheader()
+        for patron_id, fee in late_fees.items():
+            writer.writerow({'patron_id': patron_id, 'late_fees': f'{fee:.2f}'})
 
 
 # The following main selection block will only run when you choose
