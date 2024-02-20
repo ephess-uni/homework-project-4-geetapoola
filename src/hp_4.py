@@ -19,8 +19,8 @@ def date_range(start, n):
     """For input date string `start`, with format 'yyyy-mm-dd', returns
     a list of of `n` datetime objects starting at `start` where each
     element in the list is one day after the previous."""
-    #if not isinstance(start, str):
-     #   raise TypeError
+    if not isinstance(start, str):
+        raise TypeError
     if not isinstance(n, int):
         raise TypeError
     start_date = datetime.strptime(start, '%Y-%m-%d')
